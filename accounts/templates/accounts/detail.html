@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block body %}
+  <h3>{{app_user.username}}님의 페이지입니다.</h3>
+  <p>
+    이름:
+    {% if app_user.first_name %}
+      {{app_user.first_name}}
+    {% else %}
+      등록된 정보가 없습니다.
+    {% endif %}
+  </p>
+  <p>
+    성:
+    {% if app_user.last_name %}
+      {{app_user.last_name}}
+    {% else %}
+      등록된 정보가 없습니다.
+    {% endif %}
+  </p>
+  <p>
+    이메일:
+    {% if app_user.email %}
+      {{app_user.email}}
+    {% else %}
+      등록된 이메일이 없습니다.
+    {% endif %}
+  </p>
+  <hr>
+  <h3>{{app_user.username}}님이 좋아하는 영화 목록</h3>
+  {% for movie in app_user.like_movies.all %}
+    {{movie.title}},
+  {% empty %}
+    좋아하는 영화가 없습니다.
+  {% endfor %}
+  <hr>
+  <h3>{{app_user.username}}님이 남긴 댓글</h3>
+  {% for review in app_user.review_set.all %}
+    <p>{{review.score}} / {{review.content}}</p>
+  {% empty %}
+    등록한 댓글이 없습니다.
+  {% endfor %}
+
+{% endblock %}

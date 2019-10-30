@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+  <div><img src="{{movie.poster_url}}" style="width:50%"></div>
+  <div>{{movie.title}}</div>
+  <div>{{movie.audience}}</div>
+  <div>{{movie.description}}</div>
+  <div>{{movie.genre}}</div>
+  <div>추천 수: {{movie.like_users.all.count}}</div>
+
+  <form action="{% url 'movies:like' movie.id %}" method="POST">
+    {% csrf_token %}
+    {% if user in movie.like_users.all %}
+      <input type="submit" class="btn btn-success" value="좋아요 취소">
+    {% else %}
+      <input type="submit" class="btn btn-success" value="좋아요">
+    {% endif %}
+  </form>
+
+
+  <hr class="mx-5">
+  <form action="{% url 'movies:review_new' movie.id %}" method="POST">
+    {% csrf_token%}
+    {% bootstrap_form form %}
+    <input type="submit">
+  </form>
+  {% for review in movie.review_set.all %}
+    <h3>{{review.score}}점 / {{review.content}}</h3>
+    {% if user.id == review.user_id %}
+      <form action="{% url 'movies:review_delete' movie.id review.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+      </form>
+    {% endif %}
+  {% empty %}
+    <h3>등록된 평점이 없습니다.</h3>
+  {% endfor %}
+{% endblock %}

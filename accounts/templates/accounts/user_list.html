@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block body %}
+  {% for app_user in users %}
+    <h3>
+      <a href="{% url 'accounts:user_detail' app_user.id %}">{{app_user.username}}</a>
+      {% if app_user.email %}
+        {{app_user.email}}
+      {% else %}
+        이메일 등록하라구
+      {% endif %}
+    </h3>
+  {% endfor %}
+{% endblock %}
